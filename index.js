@@ -4,7 +4,9 @@ const asciify = require('asciify')
 const colors = require('colors')
 const fs = require('file-system')
 const program = require('commander')
-const [,, ...args] = process.argv;
+const [, , ...args] = process.argv;
+
+const reactFiles = require('./blueprints/react/index.js')
 
 docsMenu = () => {
     const menu = `
@@ -19,11 +21,11 @@ docsMenu = () => {
     });
 }
 
-createFile = (path, name, meta) => {
+createFile = (path, name, meta, indexed=true) => {
     console.log(`creating: ${path}/${name}`.cyan)
     fs.mkdir(path, () => {
         console.log(`copying:   ./blueprints/${meta.lib}/${meta.name}`.blue)
-        fs.copyFile(`./blueprints/${meta.lib}/${meta.name}`,`${path}/${name}.js`, () => {
+        fs.copyFile(`./blueprints/${meta.lib}/${meta.name}`,`${path}/${indexed ? `${name}/index` : name }.js`, () => {
             console.log(`[+] ./${path}/${name}.js`.green)
         })
         // fs.readFile(`./blueprints/${meta.lib}/${meta.name}`, (err, response) => {
